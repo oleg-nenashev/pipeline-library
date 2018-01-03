@@ -91,7 +91,12 @@ def call(String stageIdentifier, String label = "linux", String jdk = "8", Strin
                     mavenOptions += "-Dfindbugs.skip=true"
                     mavenOptions += "-Dcheckstyle.skip=true"
                     String prefix = "${label}-${jdk}"
-                    runParallelTests(prefix, label, mavenOptions, jdk, ((boolean)repo) ? repo : null, testParallelism, mavenEnvVars)
+                    runParallelTests(prefix, label, mavenOptions, jdk, ((boolean)repo) ? repo : null,
+                        testParallelism, mavenEnvVars, runCobertura)
+
+                    if (runCobertura) {
+                        cobertura.mergeStashes(testParallelism)
+                    }
                 }
             }
 

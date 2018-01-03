@@ -1,6 +1,6 @@
 def call(String prefix, String label, List<String> mavenOptions, String jdk = 8,
          String repo = null, int testParallelism=1,
-         List<String> extraEnvVars = null) {
+         List<String> extraEnvVars = null, boolean stashCobertura) {
 
     /* Request the test groupings.  Based on previous test results. */
     /* see https://wiki.jenkins-ci.org/display/JENKINS/Parallel+Test+Executor+Plugin and demo on github
@@ -41,6 +41,10 @@ def call(String prefix, String label, List<String> mavenOptions, String jdk = 8,
 
                 /* Archive the test results */
                 junit '**/target/surefire-reports/TEST-*.xml'
+
+                if (stashCobertura) {
+                    stash includes: 'target/coverage.xml', name: "coverage-${splitNo}.xml"
+                }
             }
         }
     }
