@@ -126,6 +126,11 @@ def call(Map params = [:]) {
     }
 
     timestamps {
-        return parallel(tasks)
+        if (tasks.size() > 1) {
+            return parallel(tasks)
+        } else {
+            tasks.entrySet().first().body()
+        }
+
     }
 }
