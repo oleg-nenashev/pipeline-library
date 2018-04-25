@@ -130,7 +130,7 @@ def call(Map params = [:]) {
         if (tasks.size() > 2) { // failFast is one of the tasks
             return parallel(tasks)
         } else {
-            tasks.entrySet().first().body()
+            tasks.entrySet().last().value.call()
         }
 
     }
