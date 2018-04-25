@@ -126,7 +126,8 @@ def call(Map params = [:]) {
     }
 
     timestamps {
-        if (tasks.size() > 1) {
+        echo "Building ${tasks.size()-1} configuration(s)"
+        if (tasks.size() > 2) { // failFast is one of the tasks
             return parallel(tasks)
         } else {
             tasks.entrySet().first().body()
