@@ -21,18 +21,17 @@ def call(Map params = [:]) {
     boolean publishingIncrementals = false
     boolean archivedArtifacts = false
     Map tasks = [failFast: failFast]
-    buildPlugin.getConfigurations(params, true).each { config ->
+    buildPlugin.getConfigurations(params).each { config ->
         String label = config.platform
         String jdk = config.jdk
         String jenkinsVersion = config.jenkins
         String javaLevel = config.javaLevel
 
+        String stageIdentifier = "${label}-${jdk}${jenkinsVersion ? '-' + jenkinsVersion : ''}"
         if ("windows".equals(label) && "true".equals(env.PIPELINE_LIBRARY_SKIP_WINDOWS)) {
             echo "Skipping ${stageIdentifier}, because `PIPELINE_LIBRARY_SKIP_WINDOWS` environment variable is set"
             return;
-        }
-
-        String stageIdentifier = "${label}-${jdk}${jenkinsVersion ? '-' + jenkinsVersion : ''}"
+        } 
         
         tasks[stageIdentifier] = {
             node(label) {
