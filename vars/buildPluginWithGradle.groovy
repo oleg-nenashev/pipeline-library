@@ -27,6 +27,11 @@ def call(Map params = [:]) {
         String jenkinsVersion = config.jenkins
         String javaLevel = config.javaLevel
 
+        if ("windows".equals(label) && "true".equals(env.PIPELINE_LIBRARY_SKIP_WINDOWS)) {
+            echo "Skipping ${stageIdentifier}, because `PIPELINE_LIBRARY_SKIP_WINDOWS` environment variable is set"
+            return;
+        }
+
         String stageIdentifier = "${label}-${jdk}${jenkinsVersion ? '-' + jenkinsVersion : ''}"
         
         tasks[stageIdentifier] = {
